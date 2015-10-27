@@ -4,10 +4,10 @@ import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'ddqie61ss5fs36',
-        'USER': 'bedoojzfaljupb',
-        'PASSWORD':'CCnH7Kh6K-BFf2Zg88kmqAhRzF',
-        'HOST':'ec2-54-83-36-203.compute-1.amazonaws.com'
+        'NAME': 'd2pk0qfit7ksi5',
+        'USER': 'lbyxuuzjtxkpjy',
+        'PASSWORD':'aQXyHCPG7mke6XX-mjTBb-SA5Z',
+        'HOST':'ec2-54-225-197-30.compute-1.amazonaws.com'
     }
 }
 
