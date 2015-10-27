@@ -103,6 +103,8 @@ AUTH_USER_MODEL = 'person.Person'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+POSTGIS_VERSION = (2, 0, 3)
+
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
