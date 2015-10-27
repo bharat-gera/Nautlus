@@ -40,13 +40,16 @@ INSTALLED_APPS = (
     'rest_framework.authtoken',
     'rest_framework',
     'rest_framework_swagger',
+    'rest_framework_gis',
     'search',
     'person',
     'djcelery',
     'workers',
     'accounts',
+    'uploadimages',
     'feedback',
     'places',
+    'local',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -167,4 +170,6 @@ REST_FRAMEWORK = {
 
 
 PROFILE_URL = 'accounts/profile'
+DEFAULT_DISTANCE = 50000               #in meters
 
+from heroku_settings import *

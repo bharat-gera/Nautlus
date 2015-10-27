@@ -1,12 +1,12 @@
 from django.db import models
 from django.conf import settings 
 from django.utils.translation import ugettext as _
-
+from search.models import PlaceDetail
 class Bookmarked(models.Model):
     
-    place_id = models.CharField(_("Place ID"),max_length=128)
+    place = models.ForeignKey(PlaceDetail,db_column='place_id')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    
+    is_marked = models.BooleanField(default=True)
     date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
     last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
     
@@ -21,9 +21,9 @@ class Bookmarked(models.Model):
     
 class Beenhere(models.Model):
     
-    place_id = models.CharField(_("Been Here"),max_length=128)
+    place = models.ForeignKey(PlaceDetail,db_column='place_id')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    
+    is_here = models.BooleanField(default=True)
     date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
     last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
     
@@ -39,9 +39,9 @@ class Beenhere(models.Model):
     
 class Favourites(models.Model):        
     
-    place_id = models.CharField(_("Been Here"),max_length=128)
+    place = models.ForeignKey(PlaceDetail,db_column='place_id')
     owner = models.ForeignKey(settings.AUTH_USER_MODEL)
-    
+    is_fav = models.BooleanField(default=True)
     date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
     last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
     
@@ -53,3 +53,12 @@ class Favourites(models.Model):
     
     def __unicode__(self):
         return 'place_id:%s,user_id:%s'%(self.place_id,self.owner)
+'''    
+class FollowFriends(models.Model):
+    
+    followers = models.ForeignKey(settings.AUTH_USER_MODEL)
+    following = models.IntegerField(_("Following ID"),)    
+    date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
+    last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
+'''    
+    

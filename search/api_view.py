@@ -1,7 +1,8 @@
 from django.conf import settings
 import requests
 from django.http import JsonResponse
-from feedback.models import ReviewRating,UploadImage
+from feedback.models import ReviewRating
+from uploadimages.models import UploadImage
 
 def simple_search_parser(req_json):
     json_list = []
@@ -108,6 +109,7 @@ def feedback_count(place_id):
     obj_image = model_image.objects.filter(place_id=place_id)
     image_count = obj_image.values_list('image').count()
     google_image = obj_image.values_list('google_images').count()
+    review_images = obj_image.values_list('review_images').count()
     review_count = obj.count()
     review_image_count = obj.count()
     total_rating_list = obj.values_list('rating')
@@ -116,7 +118,7 @@ def feedback_count(place_id):
     else:
         avg_rating = None    
     data = {'review_count':review_count,'total_votes':review_count,'avg_rating':avg_rating,\
-                              'total_uploaded_images':image_count+google_image}
+                              'total_uploaded_images':image_count+google_image+review_images}
     return data
 
 

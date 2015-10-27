@@ -6,14 +6,14 @@ class PlaceCategory(models.Model):
     category_name = models.CharField(_("Category Name"), max_length=128,unique=True)
     description = models.TextField(_("Category Desc"),)
     is_active = models.BooleanField(_("Active Category"),default=True)
-    image = models.ImageField(_("Image"),blank=True,null=True,upload_to='categories')
+    image = models.ImageField(_("Image"),upload_to='categories',null=True,blank=True)
 
     def __unicode__(self):
         return "category_name:%s"%(self.category_name)
 
 class PlaceDetail(models.Model):
 
-    place_id = models.CharField(_("Place ID"), max_length=1024,unique=True)
+    place_id = models.CharField(_("Place ID"), max_length=1024,unique=True,primary_key=True)
     place_name = models.CharField(_("Place Name"), max_length=128,blank=True)
     
     address = models.CharField(_("Address"), max_length=1024,blank=True,null=True)
@@ -40,21 +40,11 @@ class PlaceDetail(models.Model):
         app_label = 'search'
         verbose_name = _('Place Search')
         verbose_name_plural = _('Places Search')
-        ordering = ['-id']
     
+    objects = models.GeoManager()
     def __unicode__(self):
         return 'place_id:%s'%(self.place_id) 
-'''
-class PlaceImages(models.Model):
-    
-    place = models.ForeignKey(PlaceDetail,to_field='place_id',related_name='place_ref_image')
-    image = models.ImageField(_("Place Image"),upload_to = "place_image", blank=True)
-    google_images = models.TextField(_("Google Images"),null=True)    
-    date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
-    last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
-    
-    def __unicode__(self):
-        return "place_image:%s"%(self.place)'''
+
 
 class ReportError(models.Model):    
     

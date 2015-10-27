@@ -1,7 +1,7 @@
 from celery import Task
 import logging
 from search.models import PlaceDetail,PlaceCategory
-from feedback.models import UploadImage
+from uploadimages.models import UploadImage
 
 logger = logging.getLogger('celery.task')
 
@@ -54,21 +54,14 @@ class CeleryTask(Task):
                             'phone_number':ctx['data'].get('phone_number',None),'web_link':ctx['data'].get('web_link',None)}
             
             obj,created = PlaceDetail.objects.update_or_create(place_id=ctx['place_id'],defaults=update_values)
-            if not created:
-                if 'opening_hours' in ctx['data']:
-                    obj.opening_hours = ctx['data'].get('opening_hours',None)
-                    obj.open_now = ctx['data'].get('open_now',None)
-                    #obj.update(opening_hours=ctx['data'].get('opening_hours',None),open_now=ctx['data'].get('open_now',None))
-                if 'photos' in ctx['data']:
-                    for p_index in ctx['data']['photos']:
-                        UploadImage(place_id=ctx['data'].get('place_id',None),google_images=p_index).save()
-            else:
-                if 'opening_hours' in ctx['data']:
-                    obj.opening_hours = ctx['data'].get('opening_hours',None)
-                    obj.open_now = ctx['data'].get('open_now',None)
-                if 'photos' in ctx['data']:
-                    loc = 'POINT('+str(ctx['data']['coordinates']['lat'])+' '+str(ctx['data']['coordinates']['lng'])
-                    UploadImage(place_id=ctx['place_id'],google_images=ctx['data']['photos'],location=loc).save()
+            
+            if 'opening_hours' in ctx['data'] and ctx['data']['opening_hours']!=None :
+                obj.opening_hours = ctx['data'].get('opening_hours',None)
+                obj.open_now = ctx['data'].get('open_now',None)
+                obj.save()
+            if ctx['data']['photos']!=None:
+                for p_index in ctx['data']['photos']:
+                    UploadImage(place_id=ctx['place_id'],google_images=ctx['data']['photos'],location=update_values['coordinates']).save()
         except PlaceDetail.DoesNotExist:
             logger.error("Place Detail doesn't exist")
      

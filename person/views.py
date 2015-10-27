@@ -15,7 +15,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 
     def get(self, request):
         if request.GET.get('owner_id',None):
-            person = Person.objects.get(pk=request.GET['owner_id'])
+            person = get_object_or_404(Person,pk=request.GET['owner_id'])
         else:    
             person = get_object_or_404(Person,pk=request.user.id)
         serializer = PersonSerializer(person)

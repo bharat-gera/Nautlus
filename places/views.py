@@ -6,7 +6,7 @@ from feedback.permissions import OwnerPermission
 from rest_framework.response import Response
 from rest_framework import status
 
-class BookmarkedView(generics.ListCreateAPIView):
+class BookmarkedListView(generics.ListAPIView):
     
     """
     place_id -- place_id
@@ -21,9 +21,20 @@ class BookmarkedView(generics.ListCreateAPIView):
             return self.model.objects.filter(owner=self.request.user).filter(place_id=self.request.GET['place_id'])
         else:
             return self.model.objects.filter(owner=self.request.user)
+
+class BookmarkedView(generics.CreateAPIView):
+    
+    """
+    Mark Place as BookMarked
+    """
+    
+    model = Bookmarked
+    serializer_class = BookmarkedSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    lookup_field = 'place_id'
     
     def perform_create(self,serializer):
-        return serializer.save(owner=self.request.user)
+        return serializer.save(owner_id=self.request.user.id,place_id=self.kwargs['place_id'])
     
 class BookmarkedEditView(generics.DestroyAPIView,OwnerPermission):
     
@@ -44,7 +55,7 @@ class BookmarkedEditView(generics.DestroyAPIView,OwnerPermission):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class BeenhereView(generics.ListCreateAPIView):
+class BeenHereListView(generics.ListAPIView):
     
     """
     place_id -- place_id
@@ -53,16 +64,28 @@ class BeenhereView(generics.ListCreateAPIView):
     model = Beenhere
     serializer_class = BeenhereSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    
-    
+     
     def get_queryset(self):
         if self.request.GET.get('place_id',None):
             return self.model.objects.filter(owner=self.request.user).filter(place_id=self.request.GET['place_id'])
         else:
             return self.model.objects.filter(owner=self.request.user)
+
+
+class BeenHereView(generics.CreateAPIView):
+    
+    """
+    Mark Place as Beenhere
+    """
+    
+    model = Beenhere
+    serializer_class = BeenhereSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+    lookup_field = 'place_id'
+    
     
     def perform_create(self,serializer):
-        return serializer.save(owner=self.request.user)
+        return serializer.save(owner_id=self.request.user.id,place_id=self.kwargs['place_id'])
 
 class BeenhereEditView(generics.DestroyAPIView,OwnerPermission):
 
@@ -82,25 +105,37 @@ class BeenhereEditView(generics.DestroyAPIView,OwnerPermission):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-class FavouritesView(generics.ListCreateAPIView):
+class FavouriteListView(generics.ListAPIView):
     
     """
     place_id -- place_id
     """
-    
+
     model = Favourites
     serializer_class = FavouritesSerializer
     permission_classes = (permissions.IsAuthenticated,)
+     
     def get_queryset(self):
         if self.request.GET.get('place_id',None):
             return self.model.objects.filter(owner=self.request.user).filter(place_id=self.request.GET['place_id'])
         else:
             return self.model.objects.filter(owner=self.request.user)
+
+class FavouriteView(generics.CreateAPIView):
+    
+    """
+    Mark place as favourite
+    """
+    
+    model = Favourites
+    serializer_class = FavouritesSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+   
     
     def perform_create(self,serializer):
-        return serializer.save(owner=self.request.user)
+        return serializer.save(owner_id=self.request.user.id,place_id=self.kwargs['place_id'])
     
-class FavouritesEditView(generics.DestroyAPIView,OwnerPermission):
+class FavouriteEditView(generics.DestroyAPIView,OwnerPermission):
     
     """
        pk is Favourite ID
@@ -117,3 +152,10 @@ class FavouritesEditView(generics.DestroyAPIView,OwnerPermission):
         instance = self.get_object()
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+    
+        
+        
+        
+    
+    

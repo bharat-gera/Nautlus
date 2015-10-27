@@ -135,4 +135,6 @@ class Profile(models.Model):
 class ProfileImage(models.Model):
     owner = models.OneToOneField('person.Person', unique=True,
                                  related_name='profile_image')
-    image = models.ImageField(upload_to=profile_image_path, blank=True, null=True,default='media/person/profile-image/default.jpg')
+    image = models.ImageField(upload_to=profile_image_path, blank=True, null=True,default='person/profile-image/default.jpg')
+
+

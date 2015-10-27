@@ -9,6 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+        ('search', '0001_initial'),
     ]
 
     operations = [
@@ -16,10 +17,11 @@ class Migration(migrations.Migration):
             name='Beenhere',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('place_id', models.CharField(max_length=128, verbose_name='Been Here')),
+                ('is_here', models.BooleanField(default=True)),
                 ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Date Added')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='Last Modified')),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('place', models.ForeignKey(to='search.PlaceDetail')),
             ],
             options={
                 'ordering': ['-id'],
@@ -32,10 +34,11 @@ class Migration(migrations.Migration):
             name='Bookmarked',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('place_id', models.CharField(max_length=128, verbose_name='Place ID')),
+                ('is_marked', models.BooleanField(default=True)),
                 ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Date Added')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='Last Modified')),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('place', models.ForeignKey(to='search.PlaceDetail')),
             ],
             options={
                 'ordering': ['-id'],
@@ -48,10 +51,11 @@ class Migration(migrations.Migration):
             name='Favourites',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('place_id', models.CharField(max_length=128, verbose_name='Been Here')),
+                ('is_fav', models.BooleanField(default=True)),
                 ('date_added', models.DateTimeField(auto_now_add=True, verbose_name='Date Added')),
                 ('last_modified', models.DateTimeField(auto_now=True, verbose_name='Last Modified')),
                 ('owner', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
+                ('place', models.ForeignKey(to='search.PlaceDetail')),
             ],
             options={
                 'ordering': ['-id'],

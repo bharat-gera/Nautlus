@@ -9,7 +9,9 @@ apiv1 = ApiSet(
                      url(r'^accounts/', include('accounts.urls')),
                      url(r'^search/', include('search.urls')),
                      url(r'^feedback/', include('feedback.urls')),  
-                     url(r'^places/',include('places.urls')),                   
+                     url(r'^places/',include('places.urls')),
+                     url(r'^local/',include('local.urls')),
+                     url(r'^uploadimages/',include('uploadimages.urls')),                   
                      url(r'^docs/', include('rest_framework_swagger.urls'))
                      ]
                )
