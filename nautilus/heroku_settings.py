@@ -1,5 +1,16 @@
 # Parse database configuration from $DATABASE_URL
 import dj_database_url
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'nautilus',
+        'USER': 'bedoojzfaljupb',
+        'PASSWORD':'CCnH7Kh6K-BFf2Zg88kmqAhRzF',
+        'HOST':'ec2-54-83-36-203.compute-1.amazonaws.com'
+    }
+}
+
 DATABASES = {'default':dj_database_url.config()}
 DATABASES['default']['ENGINE'] = 'django.contrib.gis.db.backends.postgis'
 
