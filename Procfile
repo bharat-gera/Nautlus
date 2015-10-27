@@ -1,1 +1,1 @@
-web: gunicorn nautilus.wsgi --log-file -
+web: gunicorn nautilus.wsgi:application --log-file -
