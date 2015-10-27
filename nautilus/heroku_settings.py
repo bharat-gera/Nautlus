@@ -4,7 +4,7 @@ import dj_database_url
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'nautilus',
+        'NAME': 'ddqie61ss5fs36',
         'USER': 'bedoojzfaljupb',
         'PASSWORD':'CCnH7Kh6K-BFf2Zg88kmqAhRzF',
         'HOST':'ec2-54-83-36-203.compute-1.amazonaws.com'
