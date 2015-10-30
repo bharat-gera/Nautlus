@@ -174,4 +174,4 @@ REST_FRAMEWORK = {
 PROFILE_URL = 'accounts/profile'
 DEFAULT_DISTANCE = 50000               #in meters
 
-from heroku_settings import *
+#from heroku_settings import *

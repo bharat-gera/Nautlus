@@ -53,12 +53,16 @@ class Favourites(models.Model):
     
     def __unicode__(self):
         return 'place_id:%s,user_id:%s'%(self.place_id,self.owner)
-'''    
+    
 class FollowFriends(models.Model):
     
-    followers = models.ForeignKey(settings.AUTH_USER_MODEL)
-    following = models.IntegerField(_("Following ID"),)    
+    following = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='following')
+    follower = models.ForeignKey(settings.AUTH_USER_MODEL,related_name='follower')
     date_added = models.DateTimeField(_("Date Added"), auto_now_add=True)
     last_modified = models.DateTimeField(_("Last Modified"), auto_now=True)
-'''    
+    
+        
+        
+        
+        
     

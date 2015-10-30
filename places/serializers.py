@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from places.models import Bookmarked,Beenhere,Favourites
+from places.models import Bookmarked,Beenhere,Favourites,FollowFriends
+from person.models import ProfileImage,Person
+from person.serializers import ProfileImageSerializer
 
 class BookmarkedSerializer(serializers.ModelSerializer):
     
@@ -36,4 +38,37 @@ class FavouritesSerializer(serializers.ModelSerializer):
         if not book_obj:
             return super(FavouritesSerializer,self).save(**kwargs)
         raise serializers.ValidationError("Place is already marked Favourite")
+
+class FollowFriendsSerializer(serializers.ModelSerializer):
+
+    name = serializers.SerializerMethodField()
+    profile_image = serializers.SerializerMethodField()
+    
+    class Meta:
+        model = FollowFriends
+        fields = ('following','follower','profile_image','name',)
+        read_only_fields = ('follower','profile_image','name',)
+    
+    def get_name(self,obj):
+        
+        if self.context['request'].GET['param'] == 'following':
+            obj = Person.objects.get(id=obj.following.id)
+            return obj.name
+        elif self.context['request'].GET['param'] == 'follower':
+            obj = Person.objects.get(id=obj.follower.id)
+            return obj.name
+        
+    def get_profile_image(self,obj):
+        
+        if self.context['request'].GET['param'] == 'following':
+            obj = ProfileImage.objects.filter(owner_id=obj.following.id)
+        elif self.context['request'].GET['param'] == 'follower':
+            obj = ProfileImage.objects.filter(owner_id=obj.follower.id)
+        serializer = ProfileImageSerializer(obj[0])
+        return serializer.data
+    
+    def validate(self,data):
+        if FollowFriends.objects.filter(follower_id=self.context['request'].user.id,following_id=data['following'].id).count():
+            raise serializers.ValidationError("Already following this friend")
+        return data    
             

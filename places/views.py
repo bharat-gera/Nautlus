@@ -1,6 +1,6 @@
 from rest_framework import generics
-from places.models import Bookmarked,Beenhere,Favourites
-from places.serializers import BookmarkedSerializer,BeenhereSerializer,FavouritesSerializer
+from places.models import Bookmarked,Beenhere,Favourites,FollowFriends
+from places.serializers import BookmarkedSerializer,BeenhereSerializer,FavouritesSerializer,FollowFriendsSerializer
 from rest_framework import permissions
 from feedback.permissions import OwnerPermission
 from rest_framework.response import Response
@@ -153,8 +153,29 @@ class FavouriteEditView(generics.DestroyAPIView,OwnerPermission):
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class FollowFriendsView(generics.ListCreateAPIView):
     
-        
+    """
+    Param defined in order to get followers and following 
+    param -- query option(following,follower)
+    """
+    
+    model = FollowFriends
+    serializer_class = FollowFriendsSerializer
+    permission_classes = (permissions.IsAuthenticated,)    
+    
+    def get_param(self,request):
+        return request.GET.get('param',None)
+    
+    def get_queryset(self):
+        param = self.get_param(self.request)
+        if str(param).lower() == 'following':
+            return self.model.objects.filter(follower_id=self.request.user.id)
+        elif str(param).lower() == 'follower':
+            return self.model.objects.filter(following_id=self.request.user.id)
+    def perform_create(self,serializer):
+        return serializer.save(follower_id = self.request.user.id)    
+
         
         
     
