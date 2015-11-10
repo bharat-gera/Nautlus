@@ -30,12 +30,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = (
+    #'grappelli',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.gis',
     'kombu.transport.django',
     'rest_framework.authtoken',
     'rest_framework',
@@ -50,6 +52,8 @@ INSTALLED_APPS = (
     'feedback',
     'places',
     'local',
+    'wallet',
+    'order',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -114,6 +118,12 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
+TEMPLATE_LOADERS = (
+    'django.template.loaders.filesystem.Loader',
+    'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.eggs.Loader',
+     )
+
 # Project settings
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "staticfiles"),)
@@ -173,5 +183,12 @@ REST_FRAMEWORK = {
 
 PROFILE_URL = 'accounts/profile'
 DEFAULT_DISTANCE = 50000               #in meters
+MIN_REVIEW_LENGTH = 120                #JUST A LENGTH IN NUMBER
+MAX_REVIEW_LENGTH = 240
+CHAR_PRICE = 2              #in paisa  
+ONE_POINT_CHARS = 40       # 1point=40characters
+LEVEL_UP = 15               # 15 points level up
+LEVEL_UP_BONUS = 50    #in rs
+
 
 #from heroku_settings import *

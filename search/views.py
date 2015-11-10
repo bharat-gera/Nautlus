@@ -29,7 +29,6 @@ class SimpleSearch(APIView):
         data = self.filter_params(self.request.query_params)
         q=SearchData()
         q.delay(ctx={'data':data,'category':self.request.query_params.get('category',None)})
-        print data
         return Response(data,status=status.HTTP_200_OK)
     
 class DetailSearchView(APIView):

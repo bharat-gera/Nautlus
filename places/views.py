@@ -5,6 +5,7 @@ from rest_framework import permissions
 from feedback.permissions import OwnerPermission
 from rest_framework.response import Response
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 class BookmarkedListView(generics.ListAPIView):
     
@@ -176,7 +177,22 @@ class FollowFriendsView(generics.ListCreateAPIView):
     def perform_create(self,serializer):
         return serializer.save(follower_id = self.request.user.id)    
 
-        
-        
+class FollowFriendsEdit(generics.DestroyAPIView):        
     
+    """
+    UnFollow A Friend
+    """
+        
+    model = FollowFriends        
+    serializer_class = FollowFriendsSerializer
+    lookup_field = 'following_id'
+    permission_classes = (permissions.IsAuthenticated,)
     
+    def get_object(self,pk):
+        obj = get_object_or_404(self.model,follower_id = self.request.user.id,following_id=pk)
+        return obj
+    
+    def delete(self, request,following_id):
+        instance = self.get_object(following_id)
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -24,7 +24,7 @@ class ReviewDetailView(generics.CreateAPIView):
      
     
     def perform_create(self, serializer):
-        serializer.save(owner_id=self.request.user.id,place_id=self.kwargs['place_id'])
+        serializer.save(owner=self.request.user,place_id=self.kwargs['place_id'])
 
 class ReviewShowDetail(generics.ListAPIView):
     """
@@ -186,6 +186,4 @@ class CommentLikeEditView(OwnerPermission,generics.DestroyAPIView):
         ReviewComment.objects.filter(id=int(instance.comment_id)).update(like_count = F('like_count')-1)
         return Response(status=status.HTTP_204_NO_CONTENT)
        
-    
-
      

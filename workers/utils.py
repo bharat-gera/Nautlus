@@ -61,7 +61,11 @@ class CeleryTask(Task):
                 obj.save()
             if ctx['data']['photos']!=None:
                 for p_index in ctx['data']['photos']:
-                    UploadImage(place_id=ctx['place_id'],google_images=ctx['data']['photos'],location=update_values['coordinates']).save()
+                    img_obj = UploadImage.objects.filter(place_id=ctx['place_id']).filter(google_images=str(p_index))
+                    logger.info(img_obj)
+                    if not img_obj:          
+                        UploadImage(place_id=ctx['place_id'],google_images=p_index,\
+                                                            location=update_values['coordinates']).save()
         except PlaceDetail.DoesNotExist:
             logger.error("Place Detail doesn't exist")
      

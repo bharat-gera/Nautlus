@@ -17,7 +17,7 @@ class UploadImage(models.Model):
     
     tag_friend = models.CharField(_("Tag Friends"),max_length=1024,null=True,blank=True)
     special_feature = models.TextField(_("Special Feature"),max_length=1024,null=True,blank=True)
-    location = models.PointField(_("Review Location"),geography=True, srid=4326)
+    location = models.PointField(_("Review Location"),geography=True, srid=4326,null=True,blank=True)
     
     is_verified = models.BooleanField(_("Upload Image Verified"),default=False)
     is_credited = models.BooleanField(_("Credit on Uploaded Image"),default=False)

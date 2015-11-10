@@ -7,6 +7,9 @@ from django.db.models import F
 from permissions import start_tagging_friends
 from uploadimages.serializers import UploadImageSerializer 
 from uploadimages.models import UploadImage
+from django.shortcuts import get_object_or_404
+from search.models import PlaceDetail
+from django.conf import settings
 
 class CommentLikeSerializer(serializers.ModelSerializer):
     
@@ -123,15 +126,29 @@ class ReviewDetailSerializer(gserializers.GeoModelSerializer):
         else:
             serializer = ProfileImageSerializer(obj[0])
             return serializer.data
+    
+    def validate_review_detail(self,value):
+        num_chars = len(value.replace(' ',''))
+        if num_chars < settings.MIN_REVIEW_LENGTH:
+            raise serializers.ValidationError("Minimum Required Length for Review:120characters.")        
+        return value
+    
     def create(self, validated_data):
         
-        if validated_data.get('tag_friend',None):
-            tag_user_ids = validated_data.get('tag_friend').split(',')
-            validated_data['tag_friend'] = start_tagging_friends(tag_user_ids)
-        if validated_data.get('with_whom',None):
-            list_ids = validated_data.get('with_whom').split(',')
-            validated_data['with_whom'] = start_tagging_friends(list_ids)
-        return super(ReviewDetailSerializer,self).create(validated_data)   
-
+        review_obj = ReviewRating.objects.filter(place_id=validated_data['place_id']).filter(owner=validated_data['owner'])
+        if review_obj:
+            raise serializers.ValidationError("You have already reviewed this place.") 
+        
+        place_obj = get_object_or_404(PlaceDetail,place_id=validated_data['place_id'])
+        if validated_data['location'] == place_obj.coordinates:
+            if validated_data.get('tag_friend',None):
+                tag_user_ids = validated_data.get('tag_friend').split(',')
+                validated_data['tag_friend'] = start_tagging_friends(tag_user_ids)
+            if validated_data.get('with_whom',None):
+                list_ids = validated_data.get('with_whom').split(',')
+                validated_data['with_whom'] = start_tagging_friends(list_ids)
+            return super(ReviewDetailSerializer,self).create(validated_data)
+        else:
+            raise serializers.ValidationError("User's location is different from place")
             
         

@@ -14,7 +14,8 @@ urlpatterns = patterns('',
                        url('^favourite/$',views.FavouriteListView.as_view(),name='favouriteList'),
                        url('^(?P<place_id>[-\w]+)/favourite/$',views.FavouriteView.as_view(),name='favourite'),
                        url('^favourite/edit/(?P<pk>[0-9]+)/$',views.FavouriteEditView.as_view(),name='favouriteEdit'),
-                       url('^follow/$',views.FollowFriendsView.as_view(),name='followList'),
                        
+                       url('^follow/$',views.FollowFriendsView.as_view(),name='followList'),
+                       url('^unfollow/(?P<following_id>[0-9]+)/$',views.FollowFriendsEdit.as_view(),name='followListEdit'),
                        )
 

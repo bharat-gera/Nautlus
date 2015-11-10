@@ -38,6 +38,7 @@ def near_by_search(query_params):
         return response.content
     
     req = requests.get(query)
+    print req.json()
     return simple_search_parser(req.json())
 
 def detail_search_parser(req_json):
@@ -118,7 +119,9 @@ def feedback_count(place_id):
     else:
         avg_rating = None    
     data = {'review_count':review_count,'total_votes':review_count,'avg_rating':avg_rating,\
-                              'total_uploaded_images':image_count+google_image+review_images}
+                              'total_uploaded_images':{'image_count':image_count,'google_image':google_image,\
+                                                       'review_images':review_images}}
+
     return data
 
 
