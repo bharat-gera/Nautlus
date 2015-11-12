@@ -5,8 +5,8 @@ from api_view import near_by_search,detail_search_place,auto_search_place,google
 from rest_framework.response import Response
 from rest_framework import status
 from events import SearchData,DetailSearchData
-from search.serializers import PlaceCategorySerializer
-from search.models import PlaceCategory
+from search.serializers import PlaceCategorySerializer,PrimaryCategorySerializer
+from search.models import PlaceCategory,PrimaryCategory
     
 class SimpleSearch(APIView):
     """
@@ -75,16 +75,31 @@ class ServiceCategoryView(generics.ListAPIView):
     """
     Service Category with pagination by 10
     page -- page query param
+    primary_id  -- Main Category ID 
     """
     
     model = PlaceCategory
     serializer_class = PlaceCategorySerializer
     paginate_by = 2
     page_kwarg = 'page'
+ 
+    def query_param(self):
+        if self.request.GET.get("primary_id",None):
+            return isinstance(int(self.request.GET.get("primary_id",None)),int)
 
     def get_queryset(self):
-        return PlaceCategory.objects.filter(is_active=True)
+        if self.query_param():
+            return PlaceCategory.objects.filter(is_active=True).filter(primary_category_id=int(self.request.GET.get("primary_id",None)))
 
+class PrimaryCategoryView(generics.ListAPIView):
+    
+    model = PrimaryCategory
+    serializer_class = PrimaryCategorySerializer
+    paginate_by = 2
+    page_kwarg = 'page'
+    
+    def get_queryset(self):
+        return self.model.objects.filter(is_active=True)
             
 class GoogleImagesView(APIView):
     """

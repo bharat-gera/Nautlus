@@ -1,8 +1,20 @@
 from django.contrib.gis.db import models
 from django.utils.translation import ugettext as _
 
+class PrimaryCategory(models.Model):
+
+    primary_name = models.CharField(_("Primary Name"),max_length=128,unique=True)
+    description = models.TextField(_("Category Desc"),)
+    is_active = models.BooleanField(_("Active Category"),default=True)
+    image = models.ImageField(_("Image"),upload_to='primary_categories',null=True,blank=True)
+ 
+    def __unicode__(self):
+        return ("%s"%(self.primary_name)) 
+     
 class PlaceCategory(models.Model):
     
+    primary_category = models.ForeignKey(PrimaryCategory)
+    is_paid = models.BooleanField(default=False)
     category_name = models.CharField(_("Category Name"), max_length=128,unique=True)
     description = models.TextField(_("Category Desc"),)
     is_active = models.BooleanField(_("Active Category"),default=True)

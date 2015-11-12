@@ -9,7 +9,6 @@ def order_generation(object_id):
 
 class BusinessRating(object):
     
-
     def review_amount(self,obj):
         num_char = len((obj.review_detail).replace(" ",""))
         if num_char < settings.MAX_REVIEW_LENGTH: 
@@ -24,7 +23,10 @@ class BusinessRating(object):
         obj_wallet,created = Wallet.objects.get_or_create(owner=obj.owner)
         amt,point = self.review_amount(obj)
         if created:
-            return Wallet(owner=obj.owner,amount=amt,level=0,point=point).save()
+            obj_wallet.amount,obj_wallet.point,obj_wallet.level = amt,point,0
+            obj.is_credited = True
+            obj.save()
+            return obj_wallet.save()
         total_point,amount = obj_wallet.point + point,float(obj_wallet.amount) + amt
         level = int(total_point/settings.LEVEL_UP)
         if obj_wallet.level < level:

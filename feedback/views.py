@@ -41,9 +41,11 @@ class ReviewShowDetail(generics.ListAPIView):
     def get_queryset(self):
 
         if  self.request.GET.get("place_id",None):
-            return self.model.objects.filter(place_id=self.get_query_params()).filter(is_deleted=False) 
+            return self.model.objects.filter(place_id=self.get_query_params()).\
+                                             filter(is_deleted=False).filter(is_verified=True) 
         elif self.request.user.is_authenticated():
-            return self.model.objects.filter(owner=self.request.user).filter(is_deleted=False)
+            return self.model.objects.filter(owner=self.request.user).\
+                                            filter(is_deleted=False).filter(is_verified=True)
     
 class ReviewEditView(OwnerPermission,generics.RetrieveUpdateDestroyAPIView):
     

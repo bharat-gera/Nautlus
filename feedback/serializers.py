@@ -4,12 +4,13 @@ from rest_framework_gis import serializers as gserializers
 from person.serializers import ProfileImageSerializer
 from person.models import ProfileImage
 from django.db.models import F
-from permissions import start_tagging_friends
+from permissions import start_tagging_friends,unpaid_review
 from uploadimages.serializers import UploadImageSerializer 
 from uploadimages.models import UploadImage
 from django.shortcuts import get_object_or_404
-from search.models import PlaceDetail
+from search.models import PlaceDetail,PlaceCategory
 from django.conf import settings
+import ast
 
 class CommentLikeSerializer(serializers.ModelSerializer):
     
@@ -147,7 +148,12 @@ class ReviewDetailSerializer(gserializers.GeoModelSerializer):
             if validated_data.get('with_whom',None):
                 list_ids = validated_data.get('with_whom').split(',')
                 validated_data['with_whom'] = start_tagging_friends(list_ids)
-            return super(ReviewDetailSerializer,self).create(validated_data)
+            obj = super(ReviewDetailSerializer,self).create(validated_data)
+            cat_list = PlaceCategory.objects.filter(category_name__in=ast.literal_eval(place_obj.types)).\
+                                                    values_list('is_paid',flat=True)
+            if not True in cat_list:
+                unpaid_review(obj)  
+            return obj                                                
         else:
             raise serializers.ValidationError("User's location is different from place")
             

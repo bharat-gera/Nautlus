@@ -7,6 +7,7 @@ urlpatterns = patterns('',
     url (r'^detail/$',views.DetailSearchView.as_view()),
     url (r'^auto/$',views.AutoCompleteSearchView.as_view()),
     #url (r'^images/$',views.GoogleImagesView.as_view()),
-    url (r'^category/$',views.ServiceCategoryView.as_view())
+    url (r'^category/$',views.ServiceCategoryView.as_view()),
+    url (r'^prim-category/$',views.PrimaryCategoryView.as_view())
     
     )

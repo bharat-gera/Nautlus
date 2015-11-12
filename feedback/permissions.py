@@ -14,4 +14,10 @@ def start_tagging_friends(tag_user_ids):
         profile_url = settings.PROFILE_URL + '/' +str(ids)
         tag_friend_ids = {'owner_id':ids,'profile_url':profile_url}
         tag_list.append(tag_friend_ids)
-    return json.dumps(tag_list)         
+    return json.dumps(tag_list)
+
+
+def unpaid_review(obj):
+        obj.is_verified = True
+        obj.is_credited = False
+        return obj.save()          

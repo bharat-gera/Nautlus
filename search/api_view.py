@@ -44,16 +44,20 @@ def near_by_search(query_params):
 def detail_search_parser(req_json):
     
     result = req_json['result']
-    json_dict = {'web_link':result.get('website',None),'name':result.get('name',None),'photos':result.get('photos',None), \
-                        'coordinates':result['geometry'].get('location',None),'place_id':result.get('place_id',None),\
-                        'address':result.get('formatted_address',None),'phone_number':result.get('international_phone_number',None),\
-                        'periods':result.get('periods',None),'types':result.get('types',None),'icon':result.get('icon',None)}
-    if 'opening_hours' in result: 
-        json_dict.update({'opening_hours':result['opening_hours']['weekday_text']})
-        json_dict.update({'open_now' :result['opening_hours']['open_now']})
-    json_dict.update({'statistics':feedback_count(result.get('place_id',None))})    
-
-    return json_dict
+    if result:
+        json_dict = {'web_link':result.get('website',None),'name':result.get('name',None),'photos':result.get('photos',None), \
+                            'coordinates':result['geometry'].get('location',None),'place_id':result.get('place_id',None),\
+                            'address':result.get('formatted_address',None),'phone_number':result.get('international_phone_number',None),\
+                            'periods':result.get('periods',None),'types':result.get('types',None),'icon':result.get('icon',None)}
+        if 'opening_hours' in result: 
+            json_dict.update({'opening_hours':result['opening_hours']['weekday_text']})
+            json_dict.update({'open_now' :result['opening_hours']['open_now']})
+        json_dict.update({'statistics':feedback_count(result.get('place_id',None))})    
+    
+        return json_dict
+    else:     
+        response = JsonResponse({'Error': 'No result found'})
+        return response.content
 
 def detail_search_place(query_params):
     
@@ -63,6 +67,7 @@ def detail_search_place(query_params):
         response = JsonResponse({'Error': 'Detail Searching  based on place_id'})
         return response.content
     req=requests.get(query)
+    print req.json()
     return detail_search_parser(req.json())   
 
 def auto_search_parser(req_json):

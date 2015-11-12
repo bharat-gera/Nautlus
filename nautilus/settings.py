@@ -138,7 +138,8 @@ TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'templates'),)
 
 GOOGLE_NEAR_BY = 'https://maps.googleapis.com/maps/api/place/nearbysearch/json?'
 
-GOOGLE_API_KEY = 'AIzaSyBfpAgiMWlmBENc6A_sxQtErJ3XicHWCzA'
+#GOOGLE_API_KEY = 'AIzaSyAf_BlBBXCZEUrg_a1Df3zuWuQji4gKyxU'
+GOOGLE_API_KEY = 'AIzaSyAPl1zoa3IZw1XXR01WMOHpBxy2U0G7_vs'          #Arya's Api
 
 GOOGLE_DETAIL_API = 'https://maps.googleapis.com/maps/api/place/details/json?'
 

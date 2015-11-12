@@ -8,8 +8,8 @@ class ReviewRatingAdmin(admin.ModelAdmin):
     
     model = ReviewRating
     date_hierarchy = 'date_added'
-    list_display = ('id','review_detail','owner','place_detail','rating','location','is_verified','is_credited','is_deleted',
-              'comment_count','like_count','date_added','last_modified',)
+    list_display = ('id','review_detail','owner_detail','place_detail','rating','location','is_verified','is_credited','is_deleted',
+              'comment_count','like_count','date_added','last_modified','place_categories')
     readonly_fields = ('date_added','last_modified','review_detail','owner','place_detail','rating','place','is_verified',
                        'is_credited','comment_count','like_count','location')
     #search_fields = ('id','review_detail','owner__email','location','is_credited','place_detail')
@@ -19,6 +19,12 @@ class ReviewRatingAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.PointField: {'widget': Textarea }
     }
+    
+    def owner_detail(self,obj):
+        return ("name:%s,email:%s"%(obj.owner.name,obj.owner.email))
+    
+    def place_categories(self,obj):
+        return obj.place.types
     
     def place_detail(self,obj):
         return "Name:%s,Address:%s"%(obj.place.place_name,obj.place.address)
