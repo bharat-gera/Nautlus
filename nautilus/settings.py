@@ -191,5 +191,3 @@ ONE_POINT_CHARS = 40       # 1point=40characters
 LEVEL_UP = 15               # 15 points level up
 LEVEL_UP_BONUS = 50    #in rs
 
-
-#from heroku_settings import *
