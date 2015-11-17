@@ -77,9 +77,9 @@ WSGI_APPLICATION = 'nautilus.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME': 'nautlus',
-        'USER': 'nautlusadmin',
-        'PASSWORD':'login@123*#',	
+        'NAME': 'nautilus',
+        'USER': 'nautilusadmin',
+        'PASSWORD':'nautilus',	
         'HOST':'localhost'
     }
 }
