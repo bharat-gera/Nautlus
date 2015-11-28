@@ -113,7 +113,7 @@ def feedback_count(place_id):
 
     obj = model.objects.filter(place_id=place_id)
     obj_image = model_image.objects.filter(place_id=place_id)
-    image_count = obj_image.values_list('image').count()
+    image_count = obj_image.values_list('image',flat=True).count()
     google_image = obj_image.values_list('google_images').count()
     review_images = obj_image.values_list('review_images').count()
     review_count = obj.count()

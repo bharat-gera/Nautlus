@@ -91,6 +91,6 @@ class LocalFeedImages(generics.ListAPIView):
     filter_backends = (UploadImageLocalFeed,)
     point_filter_field = 'location'
     queryset = model.objects.all()
-    
+
     
     

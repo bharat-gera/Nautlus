@@ -80,7 +80,7 @@ class ServiceCategoryView(generics.ListAPIView):
     
     model = PlaceCategory
     serializer_class = PlaceCategorySerializer
-    paginate_by = 2
+    paginate_by = 10
     page_kwarg = 'page'
  
     def query_param(self):
@@ -93,9 +93,14 @@ class ServiceCategoryView(generics.ListAPIView):
 
 class PrimaryCategoryView(generics.ListAPIView):
     
+    """
+    Service Category with pagination by 10
+    page -- page query param
+    """
+    
     model = PrimaryCategory
     serializer_class = PrimaryCategorySerializer
-    paginate_by = 2
+    paginate_by = 10
     page_kwarg = 'page'
     
     def get_queryset(self):

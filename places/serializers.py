@@ -46,8 +46,8 @@ class FollowFriendsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = FollowFriends
-        fields = ('following','follower','profile_image','name',)
-        read_only_fields = ('follower','profile_image','name',)
+        fields = ('following','follower','name','profile_image',)
+        read_only_fields = ('follower','profile_image',)
     
     def get_name(self,obj):
         
