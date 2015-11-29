@@ -11,9 +11,9 @@ class UploadImage(models.Model):
     
     owner = models.ForeignKey(settings.AUTH_USER_MODEL,null=True,blank=True)
     
-    image = models.ImageField(_("Image"),upload_to="upload_images",null=True)
+    image = models.ImageField(_("Image"),upload_to="upload_images",null=True,blank=True)
     google_images = models.TextField(_("Google Images"),null=True)
-    review_images = models.ImageField(_("Review Image"),upload_to="upload_images",null=True)
+    review_images = models.ImageField(_("Review Image"),upload_to="upload_images",null=True,blank=True)
     
     tag_friend = models.CharField(_("Tag Friends"),max_length=1024,null=True,blank=True)
     special_feature = models.TextField(_("Special Feature"),max_length=1024,null=True,blank=True)

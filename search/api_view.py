@@ -38,7 +38,6 @@ def near_by_search(query_params):
         return response.content
     
     req = requests.get(query)
-    print req.json()
     return simple_search_parser(req.json())
 
 def detail_search_parser(req_json):
@@ -67,7 +66,6 @@ def detail_search_place(query_params):
         response = JsonResponse({'Error': 'Detail Searching  based on place_id'})
         return response.content
     req=requests.get(query)
-    print req.json()
     return detail_search_parser(req.json())   
 
 def auto_search_parser(req_json):
@@ -86,8 +84,9 @@ def auto_search_parser(req_json):
 def auto_search_place(query_params):
     
     if query_params['place_name'] and query_params['location']:
-        query = settings.GOOGLE_AUTO_API + 'input=' + query_params['place_name'] + '&location='+ \
-                                                                   query_params['location']+'&key='+settings.GOOGLE_API_KEY
+        query = settings.GOOGLE_AUTO_API + 'input=' + query_params['place_name'] + '&location='+ query_params['location'] +\
+                                                                      '&radius=' + str(settings.NEAR_BY_RADIUS) + '&key='+settings.GOOGLE_API_KEY 
+                                                                                                   
     else:
         response = JsonResponse({'Error': 'Input is invalid'})
         return response.content
@@ -106,6 +105,13 @@ def google_photo_search(query_params):
     req=requests.get(query)
     return req.json()
 
+
+def formated_list(list_input):
+    image_list = [x for x in list(list_input) if x.strip()]
+    if image_list:
+        return len(image_list)
+    else:
+        return 0 
 def feedback_count(place_id):
     
     model = ReviewRating
@@ -113,9 +119,9 @@ def feedback_count(place_id):
 
     obj = model.objects.filter(place_id=place_id)
     obj_image = model_image.objects.filter(place_id=place_id)
-    image_count = obj_image.values_list('image',flat=True).count()
-    google_image = obj_image.values_list('google_images').count()
-    review_images = obj_image.values_list('review_images').count()
+    image_count = formated_list(obj_image.values_list('image',flat=True)) 
+    google_image = formated_list(obj_image.values_list('google_images',flat=True))
+    review_images = formated_list(obj_image.values_list('review_images',flat=True))
     review_count = obj.count()
     review_image_count = obj.count()
     total_rating_list = obj.values_list('rating')

@@ -39,7 +39,6 @@ class CeleryTask(Task):
                     photo_obj,photo_created = UploadImage.objects.get_or_create(place_id=param['place_id'])
                     if photo_created:
                         photo_obj.location = 'POINT('+str(param['coordinates']['lat'])+' '+str(param['coordinates']['lng']) + ')'
-                        logger.info('images_obj_created')
                         photo_obj.google_images = param.get('photos',None)
                         photo_obj.save()
                             
@@ -60,10 +59,12 @@ class CeleryTask(Task):
                 obj.open_now = ctx['data'].get('open_now',None)
                 obj.save()
             if ctx['data']['photos']!=None:
-                for p_index in ctx['data']['photos']:
-                    img_obj = UploadImage.objects.filter(place_id=ctx['place_id']).filter(google_images=str(p_index))
-                    logger.info(img_obj)
-                    if not img_obj:          
+                img_obj = (UploadImage.objects.filter(place_id=ctx['place_id']).values_list('google_images',flat=True)).count()
+                if not (img_obj >1):
+                    logger.info("entry for detail images")
+                    for p_index in ctx['data']['photos']:
+                    #img_obj = UploadImage.objects.filter(place_id=ctx['place_id']).filter(google_images=str(p_index))
+                    #if not img_obj:          
                         UploadImage(place_id=ctx['place_id'],google_images=p_index,\
                                                             location=update_values['coordinates']).save()
         except PlaceDetail.DoesNotExist:

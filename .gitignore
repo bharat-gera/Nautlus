@@ -64,6 +64,7 @@ target/
 media/images/
 media/person/
 media/jobs/
+media/categories/
 
 #Skip Static
 static/
