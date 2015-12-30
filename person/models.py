@@ -34,9 +34,9 @@ class Person(PermissionsMixin):
     
     email = models.EmailField(_('Email address'), max_length=255, unique=True,)
     password = models.CharField(_('Password'), max_length=128,
-                                validators=[MinLengthValidator(6)])
+                                validators=[MinLengthValidator(6)],blank=True)
 
-    name = models.CharField(_('Name'), max_length=255)
+    name = models.CharField(_('Name'), max_length=255,blank=True)
 
     
     is_active = models.BooleanField(_('Active'), default=True)
@@ -137,4 +137,12 @@ class ProfileImage(models.Model):
                                  related_name='profile_image')
     image = models.ImageField(upload_to=profile_image_path, blank=True, null=True,default='person/profile-image/default.jpg')
 
+class Fblogin(models.Model):
+    
+    owner = models.OneToOneField('person.Person',related_name='auth_login_fb')
+    un_id = models.CharField(_("User ID"),max_length=128)
 
+class Googlelogin(models.Model):
+    
+    owner = models.OneToOneField('person.Person',related_name='auth_login_google')
+    un_id = models.CharField(_("User ID"),max_length=128)

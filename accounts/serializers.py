@@ -14,7 +14,8 @@ class LoginSerializer(serializers.Serializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    
+    name = serializers.CharField(required=True)
+    password = serializers.CharField(required=True)
     class Meta:
         model = User
         fields = ('name', 'email','password',)
@@ -53,3 +54,23 @@ class PassChangeSerializer(serializers.Serializer):
         if old_password == new_password:
             raise serializers.ValidationError('old and new password are same')
         return attrs
+
+class FacebookSerializer(serializers.Serializer):
+    
+    name = serializers.CharField(required=True,max_length=64)
+    email = serializers.EmailField(required=True,max_length=128)
+    un_id = serializers.CharField(required=True,max_length=128)
+    
+    def validate_email(self,value):
+        value = value.lower()
+        return value
+
+class GoogleSerializer(serializers.Serializer):
+    
+    name = serializers.CharField(required=True,max_length=64)
+    email = serializers.EmailField(required=True,max_length=128)
+    un_id = serializers.CharField(required=True,max_length=128)
+    
+    def validate_email(self,value):
+        value = value.lower()
+        return value
