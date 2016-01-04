@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 class ProfileView(generics.RetrieveUpdateAPIView):
     """
         Profile view
-        owner_id -- owner ID for profile View
+        owner_id -- owner ID for profile View (use for GET request only)
     """
     model = Profile
     serializer_class = ProfileSerializer
@@ -22,7 +22,8 @@ class ProfileView(generics.RetrieveUpdateAPIView):
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request):
-        profile = self.model.objects.get(owner=request.user)
+        
+        profile = get_object_or_404(self.model,owner=request.user)
         person = Person.objects.get(pk=request.user.id)
 
         name = request.data.get('name',person.name)
@@ -45,7 +46,7 @@ class ProfileView(generics.RetrieveUpdateAPIView):
 class ProfileImageView(generics.RetrieveUpdateAPIView):
     """
         Profile Image View
-        owner_id -- Owner ID for Pofile Image
+        owner_id -- Owner ID for Pofile Image(use for GET request only )
     """
 
     model = ProfileImage
@@ -55,14 +56,14 @@ class ProfileImageView(generics.RetrieveUpdateAPIView):
     def get(self, request):
         
         if request.GET.get("owner_id",None):
-            profile_image = self.model.objects.get(owner_id=request.GET['owner_id'])
+            profile_image = get_object_or_404(self.model,owner_id=request.GET['owner_id'])
         else:
-            profile_image = get_object_or_404(self.model,owner=request.owner)    
+            profile_image = get_object_or_404(self.model,owner=request.user)    
         serializer = self.serializer_class(profile_image)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def put(self, request):
-        profile_image = self.model.objects.get(owner=request.user)
+        profile_image = get_object_or_404(self.model,owner=request.user)
         serializer = self.serializer_class(profile_image, data=request.data)
 
         if serializer.is_valid():
