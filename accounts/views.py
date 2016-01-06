@@ -142,9 +142,7 @@ class ChangePassword(APIView):
 
 class AuthLogin(APIView):
     
-    #serializer_class = FacebookSerializer
     permission_classes = (permissions.AllowAny,)
-    #model = Fblogin
     user_model = User
     token_model = Token
     

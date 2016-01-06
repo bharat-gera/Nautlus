@@ -73,14 +73,14 @@ class AutoCompleteSearchView(APIView):
 class ServiceCategoryView(generics.ListAPIView):
     
     """
-    Service Category with pagination by 10
+    Service Category with pagination by 15
     page -- page query param
     primary_id  -- Main Category ID 
     """
     
     model = PlaceCategory
     serializer_class = PlaceCategorySerializer
-    paginate_by = 10
+    paginate_by = 15
     page_kwarg = 'page'
  
     def query_param(self):
@@ -89,18 +89,19 @@ class ServiceCategoryView(generics.ListAPIView):
 
     def get_queryset(self):
         if self.query_param():
-            return PlaceCategory.objects.filter(is_active=True).filter(primary_category_id=int(self.request.GET.get("primary_id",None)))
-
+            return self.model.objects.filter(is_active=True).filter(primary_category_id=int(self.request.GET.get("primary_id",None)))
+        return self.model.objects.filter(is_active=True)
+        
 class PrimaryCategoryView(generics.ListAPIView):
     
     """
-    Service Category with pagination by 10
+    Service Category with pagination by 15
     page -- page query param
     """
     
     model = PrimaryCategory
     serializer_class = PrimaryCategorySerializer
-    paginate_by = 10
+    paginate_by = 15
     page_kwarg = 'page'
     
     def get_queryset(self):
