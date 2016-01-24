@@ -25,6 +25,10 @@ class ProfileImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileImage
         fields = ('image',)        
+    
+    def validate_image(self,value):
+        print dir(value)
+        return value.name.strip('"')    
 
 class PersonSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
