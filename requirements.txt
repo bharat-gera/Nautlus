@@ -2,7 +2,7 @@ amqp==1.4.7
 anyjson==0.3.3
 billiard==3.3.0.20
 celery==3.1.15
-Django==1.7
+Django==2.2.24
 django-celery==3.1.16
 django-rest-swagger==0.3.4
 django-toolbelt==0.0.1
